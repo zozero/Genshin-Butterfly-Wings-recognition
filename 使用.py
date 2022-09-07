@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from 数据处理类 import 测试时数据处理
 from 晶蝶模型类 import 晶蝶模型
 
-模型存储路径 = '已训练的模型/晶蝶模型.ckpt3_8'
+模型存储路径 = '已训练的模型/晶蝶模型.ckpt6_8'
 
 
 def 评估(图片):
@@ -26,8 +26,9 @@ def 评估(图片):
     for 图片 in 测试用数据加载器:
         图片 = 图片.to(设备)
         验证 = 模型(图片)
-        print('验证结果：', 验证.item())
-        if 0.8 < 验证.item() < 1.2:
+
+        # print('验证结果：', 验证.item())
+        if 0.9 < 验证.item() < 1.1:
             return True
         else:
             return False
@@ -62,10 +63,13 @@ if __name__ == '__main__':
         # 找到轮廓
         轮廓列表, 阶层 = cv2.findContours(偏差, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         帧2拷贝 = 帧2.copy()
+        晶蝶_计数 = 0
+        轮廓_计数 = 0
         # 绘制轮廓
         for 轮廓 in 轮廓列表:
             周长 = cv2.arcLength(轮廓, True)
             if 周长 > 300:
+                轮廓_计数 += 1
                 x, y, 宽, 高 = cv2.boundingRect(轮廓)
                 外扩值 = 20
                 图片 = Image.fromarray(帧2)
@@ -78,6 +82,7 @@ if __name__ == '__main__':
                 cv2.resizeWindow('tupian1', 230, 50)
                 返回值 = 评估(图片)
                 if 返回值:
+                    晶蝶_计数 += 1
                     # 显示预测后为晶蝶的图片
                     cv2.imshow('tupian2', 图片)
                     cv2.resizeWindow('tupian2', 230, 50)
@@ -85,7 +90,7 @@ if __name__ == '__main__':
                     cv2.rectangle(帧2拷贝, (x - 外扩值, y - 外扩值), (x + 宽 + 外扩值, y + 高 + 外扩值), (0, 255, 0), 2)
                 # 所有用帧差法找到的框显示为红色
                 cv2.rectangle(帧2拷贝, (x - 外扩值 - 10, y - 外扩值 - 10), (x + 宽 + 外扩值 + 10, y + 高 + 外扩值 + 10), (0, 0, 255), 2)
-
+                print(f'轮廓数量：{轮廓_计数}，判断为晶蝶的数量：{晶蝶_计数}，百分比：{晶蝶_计数 / 轮廓_计数:.2f}')
         # 显示
         # 二值化，帧差法图片
         # cv2.imshow('piancha', 偏差)

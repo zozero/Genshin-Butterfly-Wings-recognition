@@ -1,3 +1,4 @@
+import torch.nn
 from torch import nn
 
 
@@ -14,13 +15,13 @@ def 初始化权重(模型):
 class 晶蝶模型(nn.Module):
     def __init__(self):
         super(晶蝶模型, self).__init__()
-        self.卷积1 = nn.Conv2d(3, 16, 3, 1, 1)
+        self.卷积1 = nn.Conv2d(3, 4, 3, 1, 1)
         self.线性整流函数1 = nn.ReLU()
         self.池化1 = nn.MaxPool2d(2, 2)
 
-        self.全连接层1 = nn.Linear(16 * 25 * 25, 8 * 25)
-        self.全连接层2 = nn.Linear(8 * 25, 8)
-        self.全连接层3 = nn.Linear(8, 1)
+        self.全连接层1 = nn.Linear(4 * 25 * 25, 2 * 25)
+        self.全连接层2 = nn.Linear(2 * 25, 2)
+        self.全连接层3 = nn.Linear(2, 1)
 
         self.线性整流函数2 = nn.ReLU()
 
@@ -39,10 +40,17 @@ class 晶蝶模型(nn.Module):
 
         return 输出
 
+
 # 直接使用预设的函数了，所以以下代码放弃。
-# class 晶蝶损失(nn.Module):
-#     def __init__(self):
-#         super(晶蝶损失, self).__init__()
-#
-#     def forward(self, 输入, 目标):
-#         return abs(目标 - 输入)
+class 晶蝶损失(nn.Module):
+    def __init__(self):
+        super(晶蝶损失, self).__init__()
+
+    def forward(self, 输入, 目标):
+        """
+        让是晶蝶的趋近于1，不是的趋近于0
+        :param 输入:
+        :param 目标:
+        :return:
+        """
+        return (输入 - 目标)**2
