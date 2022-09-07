@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from 数据处理类 import 测试时数据处理
 from 晶蝶模型类 import 晶蝶模型
 
-模型存储路径 = '已训练的模型/晶蝶模型.ckpt6_8'
+模型存储路径 = '已训练的模型/晶蝶模型.ckpt6_9'
 
 
 def 评估(图片):
@@ -28,14 +28,14 @@ def 评估(图片):
         验证 = 模型(图片)
 
         # print('验证结果：', 验证.item())
-        if 0.9 < 验证.item() < 1.1:
+        if 0.7 < 验证.item() < 1.1:
             return True
         else:
             return False
 
 
 if __name__ == '__main__':
-    视频 = cv2.VideoCapture('视频/test4.mkv')
+    视频 = cv2.VideoCapture('视频/test7.mp4')
 
     while True:
         返回值, 帧 = 视频.read()
@@ -71,7 +71,7 @@ if __name__ == '__main__':
             if 周长 > 300:
                 轮廓_计数 += 1
                 x, y, 宽, 高 = cv2.boundingRect(轮廓)
-                外扩值 = 20
+                外扩值 = 10
                 图片 = Image.fromarray(帧2)
                 图片 = 图片.crop((x - 外扩值, y - 外扩值, x + 宽 + 外扩值, y + 高 + 外扩值))
                 图片 = 图片.resize((50, 50))
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         # 实际完整显示的效果
         cv2.imshow('zhen2', 帧2拷贝)
 
-        键 = cv2.waitKey(5) & 0xff
+        键 = cv2.waitKey(100) & 0xff
         if 键 == 27:
             break
     视频.release()

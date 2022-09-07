@@ -12,10 +12,10 @@ from 晶蝶模型类 import 晶蝶模型
 随机种子 = 123
 torch.manual_seed(随机种子)
 torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False  # 避免因为随机性产生出差异
+torch.backends.cudnn.benchmark = True  # 避免因为随机性产生出差异
 np.random.seed(随机种子)
 
-模型存储路径 = '已训练的模型/晶蝶模型.ckpt6_8'
+模型存储路径 = '已训练的模型/晶蝶模型.ckpt6_9'
 
 
 def 评估(模型, 设备):
@@ -44,16 +44,14 @@ if __name__ == '__main__':
         pass
 
     损失函数 = 晶蝶损失()
-    # 损失函数 = torch.nn.Sigmoid()
-    # 损失函数 = torch.nn.L1Loss()
     损失函数.to(设备)
-    优化器 = optim.Adam(模型.parameters(), lr=0.00001)
+    优化器 = optim.Adam(模型.parameters(), lr=0.0001)
     print(模型)
 
     训练用数据 = 数据处理()
     训练用数据加载器 = DataLoader(训练用数据, shuffle=True)
     计数 = 0
-    for 轮回 in range(10):
+    for 轮回 in range(20):
         for 标签, 图片 in 训练用数据加载器:
             图片 = 图片.to(设备)
             标签 = 标签.to(设备)
